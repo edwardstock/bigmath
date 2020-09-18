@@ -58,12 +58,12 @@ commands:
       - init
       - checkout_recursive
       - conan_remotes
-      - conan_restore_cache
+#      - conan_restore_cache
       - conan_project_deps
-      - conan_save_cache
+      #      - conan_save_cache
       - project_test
       - project_deploy_conan
-      - project_upload_release
+#      - project_upload_release
 
 jobs:
   gcc-5:
