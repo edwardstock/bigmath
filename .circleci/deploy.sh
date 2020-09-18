@@ -3,8 +3,6 @@ set -e
 set -x
 
 VERS=$(cat version | tr -d "\n")
-echo $VERS
-exit
 
 sysname=$(uname)
 
