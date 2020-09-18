@@ -9,11 +9,11 @@ mkdir -p _build_package && cd _build_package
 rm -rf output/*
 rm -rf _build_package/*
 
-cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_CONAN=Off -DENABLE_TEST=Off -DCMAKE_INSTALL_PREFIX=$(pwd)/_install
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SHARED=Off -DENABLE_TEST=Off -DCMAKE_INSTALL_PREFIX=$(pwd)/_install
 cmake --build . -- -j4
 cmake --build . --target install
 
-cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SHARED=On -DENABLE_CONAN=Off -DENABLE_TEST=Off -DCMAKE_INSTALL_PREFIX=$(pwd)/_install
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SHARED=On -DENABLE_TEST=Off -DCMAKE_INSTALL_PREFIX=$(pwd)/_install
 cmake --build . -- -j4
 cmake --build . --target install
 

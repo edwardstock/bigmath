@@ -28,7 +28,7 @@ commands:
           key: custom-pkgs-{{ checksum ".circleci/setup.sh" }}-{{ checksum ".circleci/conan_deps.sh" }}
           paths:
             - /tmp/pkgs
-            - /root/.conan/data
+            - /home/conan/.conan/data
   conan_project_deps:
     steps:
       - run:
