@@ -1,5 +1,7 @@
 build/**
 _build/**
+_build_package/**
+output/**
 cmake-build-*
 !.gitkeep
 .idea/
