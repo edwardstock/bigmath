@@ -2,7 +2,7 @@
 
 | Bintray | Windows | Linux & macOS |
 |:--------:|:---------:|:-----------------:|
-|[ ![Download](https://api.bintray.com/packages/edwardstock/conan-public/bigmath%3Aconan-public/images/download.svg) ](https://bintray.com/edwardstock/conan-public/bigmath%3Aconan-public/_latestVersion)|unavailable|[![CircleCI](https://circleci.com/gh/edwardstock/bigmath/tree/master.svg?style=svg)](https://circleci.com/gh/edwardstock/bigmath/tree/master)|
+[ ![Download](https://api.bintray.com/packages/edwardstock/conan-public/bigmath:edwardstock/images/download.svg?_latestVersion)](https://bintray.com/edwardstock/conan-public/bigmath:edwardstock/_latestVersion)|unavailable|[![CircleCI](https://circleci.com/gh/edwardstock/bigmath/tree/master.svg?style=svg)](https://circleci.com/gh/edwardstock/bigmath/tree/master)|
 
 
 
