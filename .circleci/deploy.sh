@@ -2,13 +2,9 @@
 set -e
 set -x
 
-if [ -f "../version" ]; then
-  VERS=$(cat ../version | tr -d "\n")
-fi
-
-if [ "${1}" != "" ]; then
-  VERS=${1}
-fi
+VERS=$(cat version | tr -d "\n")
+echo $VERS
+exit
 
 sysname=$(uname)
 
