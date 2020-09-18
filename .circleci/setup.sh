@@ -2,7 +2,7 @@
 
 if [ ! -f "/usr/bin/g++" ]; then
   apt-get update
-  apt-get install -y python python3 python3-pip gcc g++ gdb git make curl wget default-jdk
+  apt-get install -y python python3 python3-pip gcc g++ gdb git make curl wget
 fi
 
 if [ ! -d "/tmp/pkgs" ]; then
@@ -20,9 +20,9 @@ if [ ! -f "/usr/bin/cmake" ]; then
 fi
 
 # github uploader
-ghr_file="ghr_v0.12.1_linux_amd64"
+ghr_file="ghr_v0.13.0_linux_amd64"
 if [ ! -f "/tmp/pkgs/ghr.tar.gz" ]; then
-  wget -O /tmp/pkgs/ghr.tar.gz https://github.com/tcnksm/ghr/releases/download/v0.12.1/${ghr_file}.tar.gz
+  wget -O /tmp/pkgs/ghr.tar.gz https://github.com/tcnksm/ghr/releases/download/v0.13.0/${ghr_file}.tar.gz
 fi
 
 if [ ! -f "/usr/bin/ghr" ]; then

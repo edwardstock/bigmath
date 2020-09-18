@@ -1,18 +1,25 @@
 #!/usr/bin/env bash
+set -e
+set -x
+
 rootDir=$(pwd)
 mkdir -p output
 mkdir -p _build_package && cd _build_package
 
-rm -rf ${rootDir}/output/*
-rm -rf _install
+rm -rf output/*
+rm -rf _build_package/*
 
 cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_CONAN=Off -DENABLE_TEST=Off -DCMAKE_INSTALL_PREFIX=$(pwd)/_install
 cmake --build . -- -j4
 cmake --build . --target install
 
-function to_lower() {
-  local outRes=$(echo ${1} | awk '{ for ( i=1; i <= NF; i++) {   sub(".", substr(tolower($i),1,1) , $i)  } print }')
-  echo "${outRes}"
+cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SHARED=On -DENABLE_CONAN=Off -DENABLE_TEST=Off -DCMAKE_INSTALL_PREFIX=$(pwd)/_install
+cmake --build . -- -j4
+cmake --build . --target install
+
+
+_to_lower() {
+  echo ${1} | tr '[:upper:]' '[:lower:]'
 }
 
 tar_bin=$(which tar | tr -d "\n")
@@ -35,15 +42,15 @@ fi
 
 arch=$(uname -m)
 sysname=$(uname)
-sysname=$(to_lower ${sysname})
+sysname=$(_to_lower ${sysname})
 gvers=$(git tag | sort -r | head -n 1)
 ghash=$(git rev-parse --short=8 HEAD)
 fname_sufix="v${gvers}-${ghash}-${sysname}-${arch}"
-fname="libbip39-${fname_sufix}.tar.gz"
+fname="libbigmath-${fname_sufix}.tar.gz"
 
-cd $(pwd)/_install
+mv $(pwd)/_install "$(pwd)/libbigmath"
 
-tar -zcvf "${fname}" .
+tar -zcvf "${fname}" "libbigmath"
 
 mv "${fname}" ${rootDir}/output/
 cd ${rootDir}/output

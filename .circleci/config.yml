@@ -1,0 +1,133 @@
+version: 2.1
+commands:
+  init:
+    steps:
+      - run: apt-get update
+  checkout_recursive:
+    steps:
+      - run:
+          name: Checkout
+          command: git clone --recursive https://github.com/edwardstock/bigmath .
+  conan_remotes:
+    steps:
+      - run: sudo pip3 install setuptools -U
+      - run: sudo pip3 install conan
+      - run: sudo pip3 install --upgrade conan
+      - run: conan remote add edwardstock https://api.bintray.com/conan/edwardstock/conan-public
+      - run: conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+      - run: conan user -p $BINTRAY_API_KEY -r edwardstock edwardstock
+
+  conan_restore_cache:
+    steps:
+      - restore_cache: # restore cache
+          keys:
+            - custom-pkgs-{{ checksum ".circleci/setup.sh" }}-{{ checksum ".circleci/conan_deps.sh" }}
+  conan_save_cache:
+    steps:
+      - save_cache: # save cache
+          key: custom-pkgs-{{ checksum ".circleci/setup.sh" }}-{{ checksum ".circleci/conan_deps.sh" }}
+          paths:
+            - /tmp/pkgs
+            - /root/.conan/data
+  conan_project_deps:
+    steps:
+      - run:
+          name: Project dependencies
+          command: $(which bash) .circleci/conan_deps.sh
+
+  project_test:
+    steps:
+      - run:
+          name: Testing
+          command: $(which bash) .circleci/test.sh
+
+  project_deploy_conan:
+    steps:
+      - run:
+          name: Deploy to Conan bintray
+          command: $(which bash) .circleci/deploy.sh
+
+  project_upload_release:
+    steps:
+      - run:
+          name: Deploy to Github
+          command: $(which bash) .circleci/package.sh
+
+  do_all:
+    steps:
+      - init
+      - checkout_recursive
+      - conan_remotes
+      - conan_restore_cache
+      - conan_project_deps
+      - conan_save_cache
+      - project_test
+      - project_deploy_conan
+      - project_upload_release
+
+jobs:
+  gcc-5:
+    docker:
+      - image: conanio/gcc5
+        environment:
+          CXX: /usr/bin/g++
+          CC: /usr/bin/gcc
+          CONAN_CPU_COUNT: 8
+    steps:
+      - do_all
+  gcc-6:
+    docker:
+      - image: conanio/gcc6
+        environment:
+          CXX: /usr/bin/g++
+          CC: /usr/bin/gcc
+          CONAN_CPU_COUNT: 8
+    steps:
+      - do_all
+  gcc-7:
+    docker:
+      - image: conanio/gcc7
+        environment:
+          CXX: /usr/bin/g++
+          CC: /usr/bin/gcc
+          CONAN_CPU_COUNT: 8
+    steps:
+      - do_all
+  gcc-8:
+    docker:
+      - image: conanio/gcc8
+        environment:
+          CXX: /usr/bin/g++
+          CC: /usr/bin/gcc
+          CONAN_CPU_COUNT: 8
+    steps:
+      - do_all
+  gcc-9:
+    docker:
+      - image: conanio/gcc9
+        environment:
+          CXX: /usr/bin/g++
+          CC: /usr/bin/gcc
+          CONAN_CPU_COUNT: 8
+    steps:
+      - do_all
+  gcc-10:
+    docker:
+      - image: conanio/gcc10
+        environment:
+          CXX: /usr/bin/g++
+          CC: /usr/bin/gcc
+          CONAN_CPU_COUNT: 8
+    steps:
+      - do_all
+
+workflows:
+  version: 2.1
+  build_and_test:
+    jobs:
+      - gcc-5
+      - gcc-6
+      - gcc-7
+      - gcc-8
+      - gcc-9
+      - gcc-10
