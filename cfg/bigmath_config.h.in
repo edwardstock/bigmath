@@ -1,0 +1,60 @@
+/*!
+ * bigmath.
+ * bigmath_config.h
+ *
+ * \date 09/13 2020
+ * \author Eduard Maximovich (edward.vstock@gmail.com)
+ * \link   https://github.com/edwardstock
+ */
+
+#ifndef BIGMATHPP_CONFIG_H
+#define BIGMATHPP_CONFIG_H
+
+#include <cstdint>
+
+#cmakedefine HAVE_UINT128_T 1
+#cmakedefine HAVE_UINT64_T 1
+#cmakedefine HAVE_GMP
+#cmakedefine HAVE_MPIR
+
+#cmakedefine BIGMATHPP_SHARED
+#cmakedefine BIGMATHPP_EXPORTING
+
+#define ANSI 1
+
+#ifndef CONFIG_64
+#define CONFIG_64 1
+#endif
+
+#ifdef BIGMATHPP_SHARED
+#ifdef BIGMATHPP_EXPORTING
+#if _MSC_VER
+#define BIGMATHPP_API __declspec(dllexport)
+#define BIGMATHPP_EXT
+#else
+#define BIGMATHPP_API __attribute__((visibility("default")))
+#define BIGMATHPP_EXT
+#endif
+#else
+#if _MSC_VER
+#define BIGMATHPP_API __declspec(dllimport)
+#define BIGMATHPP_EXT extern
+#else
+#define BIGMATHPP_API
+#define BIGMATHPP_EXT
+#endif
+#endif
+#else
+#define BIGMATHPP_API
+#define BIGMATHPP_EXT
+#endif // BIGMATHPP_SHARED
+
+#ifndef ALWAYS_INLINE
+#ifdef _MSC_VER
+#define ALWAYS_INLINE __forceinline
+#else
+#define ALWAYS_INLINE inline __attribute__((always_inline))
+#endif
+#endif
+
+#endif // BIGMATHPP_CONFIG_H
