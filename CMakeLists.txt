@@ -2,6 +2,11 @@ cmake_minimum_required(VERSION 3.9)
 project(bigmath VERSION 1.0.0)
 set(CMAKE_CXX_STANDARD 17)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY lib)
+set(CMAKE_PDB_OUTPUT_DIRECTORY lib)
+
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/modules)
 if (WIN32)
 	execute_process(COMMAND cmd /C "echo ${CMAKE_PROJECT_VERSION} > ${CMAKE_CURRENT_SOURCE_DIR}/version")
@@ -149,7 +154,7 @@ if (ENABLE_TEST)
 		)
 	endif ()
 
-	add_test(NAME test-all COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-test)
+	add_test(NAME test-all COMMAND ${CMAKE_CURRENT_BINARY_DIR}/bin/${PROJECT_NAME}-test)
 
 endif ()
 
