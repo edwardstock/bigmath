@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-if [ ! -f "/usr/bin/g++" ]; then
-  apt-get update
-  apt-get install -y python python3 python3-pip gcc g++ gdb git make curl wget
-fi
-
 if [ ! -d "/tmp/pkgs" ]; then
   mkdir -p /tmp/pkgs
 fi

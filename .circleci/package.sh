@@ -17,7 +17,6 @@ cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_SHARED=On -DENABLE_CONAN=Off -DENABLE
 cmake --build . -- -j4
 cmake --build . --target install
 
-
 _to_lower() {
   echo ${1} | tr '[:upper:]' '[:lower:]'
 }
