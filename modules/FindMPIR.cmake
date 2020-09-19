@@ -4,12 +4,6 @@ if (MPIR_INCLUDES AND MPIR_LIBRARIES)
 	set(MPIR_FIND_QUIETLY TRUE)
 endif ()
 
-if (MPIR_ROOT)
-	set(_MPIR_ROOT_INCLUDE ${MPIR_ROOT}/include)
-	set(_MPIR_ROOT_LIB ${MPIR_ROOT}/lib)
-endif ()
-
-
 find_path(MPIR_INCLUDES
           NAMES
           mpir.h

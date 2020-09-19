@@ -1,6 +1,11 @@
-cmake_minimum_required(VERSION 3.9)
-project(bigmath VERSION 1.0.0)
+cmake_minimum_required(VERSION 3.12)
+project(bigmath
+        VERSION 1.0.0
+        DESCRIPTION "C++ arbitrary precision float and integer numbers library"
+        LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
+
+cmake_policy(SET CMP0074 NEW)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/modules)
 if (WIN32)
@@ -159,8 +164,11 @@ install(
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib
 )
-
 install(
 	DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/bigmath
 	DESTINATION include
+)
+install(
+	DIRECTORY ${CMAKE_BINARY_DIR}/pkgconfig
+	DESTINATION lib
 )
