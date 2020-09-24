@@ -47,12 +47,17 @@ set(SOURCES
 if (ENABLE_SHARED)
 	message(STATUS "Build shared library")
 	add_library(${PROJECT_NAME} SHARED ${SOURCES})
-	set_property(TARGET ${PROJECT_NAME} PROPERTY
-	             MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+
+	if (MSVC)
+		set_property(TARGET ${PROJECT_NAME} PROPERTY
+		             MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+	endif ()
 else ()
 	add_library(${PROJECT_NAME} STATIC ${SOURCES})
-	set_property(TARGET ${PROJECT_NAME} PROPERTY
-	             MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+	if (MSVC)
+		set_property(TARGET ${PROJECT_NAME} PROPERTY
+		             MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+	endif ()
 endif ()
 
 
@@ -67,7 +72,7 @@ if (ENABLE_CONAN)
 	target_link_libraries(${PROJECT_NAME} CONAN_PKG::mpir)
 	target_link_libraries(${PROJECT_NAME} CONAN_PKG::mpdecimal)
 else ()
-	find_package(GMP 6.2.0)
+	find_package(GMP 6.0.0)
 	find_package(MPIR 3.0.0)
 
 	if (GMP_LIBRARIES-NOTFOUND AND MPIR_LIBRARIES-NOTFOUND)
@@ -158,17 +163,6 @@ if (ENABLE_TEST)
 
 endif ()
 
-install(
-	TARGETS ${PROJECT_NAME}
-	RUNTIME DESTINATION bin
-	LIBRARY DESTINATION lib
-	ARCHIVE DESTINATION lib
-)
-install(
-	DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/bigmath
-	DESTINATION include
-)
-install(
-	DIRECTORY ${CMAKE_BINARY_DIR}/pkgconfig
-	DESTINATION lib
-)
+#include(FindLinuxPlatform)
+include(package)
+
