@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+UNAME=$BINTRAY_USER
+PASS=$BINTRAY_API_KEY
+BASE_URL=https://api.bintray.com/content/edwardstock
+
+
+
+if [ "$1" == "dry" ]; then
+  echo "curl -T @UPLOAD_FILE_NAME@ -u${UNAME}:${PASS} \"${BASE_URL}/@REPO_NAME@/@PROJECT_NAME@/@PROJECT_VERSION@/@TARGET_PATH@/@UPLOAD_FILE_NAME@@URL_SUFFIX@\""
+  exit 0
+fi
+
+curl -T @UPLOAD_FILE_NAME@ -u${UNAME}:${PASS} "${BASE_URL}/@REPO_NAME@/@PROJECT_NAME@/@PROJECT_VERSION@/@TARGET_PATH@/@UPLOAD_FILE_NAME@@URL_SUFFIX@"
