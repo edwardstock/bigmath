@@ -1,0 +1,18 @@
+set(BIGMATH_VERSION @PROJECT_VERSION@)
+
+@PACKAGE_INIT@
+
+set_and_check(BIGMATH_INCLUDE_DIR "@PACKAGE_INSTALL_INCLUDE_DIR@")
+set_and_check(BIGMATH_LIB_DIR "@PACKAGE_INSTALL_LIB_DIR@")
+
+if("@HAS_TARGET_DEPS@" STREQUAL "1")
+	include(CMakeFindDependencyMacro)
+
+	# bigmath provides Find*.cmake modules for: GMP, MPIR and mpdecimal
+	list(APPEND CMAKE_MODULE_PATH ${BIGMATH_LIB_DIR}/cmake)
+
+@targets_deps_joined@
+
+endif()
+
+include("@PACKAGE_INSTALL_CMAKE_DIR@/@PROJECT_NAME@-targets.cmake")

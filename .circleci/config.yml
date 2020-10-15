@@ -1,123 +1,93 @@
 version: 2.1
 commands:
-  init:
+  local_test:
     steps:
-      - run: sudo apt-get update
-  checkout_recursive:
+      - run: cp -r /tmp/_circleci_local_build_repo/* ~/project/
+      - run: cp -r /tmp/_circleci_local_build_repo/.circleci ~/project/
+  checkout:
     steps:
-      - run:
-          name: Checkout
-          command: git clone --recursive https://github.com/edwardstock/bigmath .
-  conan_remotes:
+      - run: git clone --recursive https://github.com/edwardstock/bigmath.git .
+
+  conan:
     steps:
-      - run: sudo pip3 install setuptools -U
-      - run: sudo pip3 install conan
-      - run: sudo pip3 install --upgrade conan
-      - run: conan remote add edwardstock https://api.bintray.com/conan/edwardstock/conan-public
-      - run: conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+      - run: conan remote add -f edwardstock https://api.bintray.com/conan/edwardstock/conan-public
+      - run: conan remote add -f bincrafters https://api.bintray.com/conan/bincrafters/public-conan
       - run: conan user -p $BINTRAY_API_KEY -r edwardstock edwardstock
-
-  conan_restore_cache:
-    steps:
-      - restore_cache: # restore cache
-          keys:
-            - custom-pkgs-{{ checksum ".circleci/setup.sh" }}-{{ checksum ".circleci/conan_deps.sh" }}
-  conan_save_cache:
-    steps:
-      - save_cache: # save cache
-          key: custom-pkgs-{{ checksum ".circleci/setup.sh" }}-{{ checksum ".circleci/conan_deps.sh" }}
-          paths:
-            - /tmp/pkgs
-            - /home/conan/.conan/data
-  conan_project_deps:
-    steps:
-      - run:
-          name: Project dependencies
-          command: $(which bash) .circleci/conan_deps.sh
-
-  project_test:
-    steps:
-      - run:
-          name: Testing
-          command: $(which bash) .circleci/test.sh
-
-  project_deploy_conan:
-    steps:
-      - run:
-          name: Deploy to Conan bintray
-          command: $(which bash) .circleci/deploy.sh
-
-  project_upload_release:
-    steps:
-      - run:
-          name: Deploy to Github
-          command: $(which bash) .circleci/package.sh
 
   do_all:
     steps:
-      - init
-      - checkout_recursive
-      - conan_remotes
-#      - conan_restore_cache
-      - conan_project_deps
-      #      - conan_save_cache
-      - project_test
-      - project_deploy_conan
-#      - project_upload_release
+      - conan
+      - checkout
+      #      - local_test
+      - run: bash .circleci/test.sh
+      - run: bash .circleci/setup.sh
+      - run: bash .circleci/deploy.sh
 
 jobs:
+  gcc-4_8_5:
+    docker:
+      - image: docker.edwardstock.com/gcc_dev_el7
+    steps:
+      - do_all
+
   gcc-5:
     docker:
       - image: conanio/gcc5
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_TOKEN
         environment:
-          CXX: /usr/bin/g++
-          CC: /usr/bin/gcc
-          CONAN_CPU_COUNT: 8
+          CONAN_CPU_COUNT: 4
     steps:
       - do_all
   gcc-6:
     docker:
       - image: conanio/gcc6
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_TOKEN
         environment:
-          CXX: /usr/bin/g++
-          CC: /usr/bin/gcc
-          CONAN_CPU_COUNT: 8
+          CONAN_CPU_COUNT: 4
     steps:
       - do_all
   gcc-7:
     docker:
       - image: conanio/gcc7
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_TOKEN
         environment:
-          CXX: /usr/bin/g++
-          CC: /usr/bin/gcc
-          CONAN_CPU_COUNT: 8
+          CONAN_CPU_COUNT: 4
     steps:
       - do_all
   gcc-8:
     docker:
       - image: conanio/gcc8
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_TOKEN
         environment:
-          CXX: /usr/bin/g++
-          CC: /usr/bin/gcc
-          CONAN_CPU_COUNT: 8
+          CONAN_CPU_COUNT: 4
     steps:
       - do_all
   gcc-9:
     docker:
       - image: conanio/gcc9
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_TOKEN
         environment:
-          CXX: /usr/bin/g++
-          CC: /usr/bin/gcc
-          CONAN_CPU_COUNT: 8
+          CONAN_CPU_COUNT: 4
     steps:
       - do_all
   gcc-10:
     docker:
       - image: conanio/gcc10
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_TOKEN
         environment:
-          CXX: /usr/bin/g++
-          CC: /usr/bin/gcc
-          CONAN_CPU_COUNT: 8
+          CONAN_CPU_COUNT: 4
     steps:
       - do_all
 
@@ -125,9 +95,24 @@ workflows:
   version: 2.1
   build_and_test:
     jobs:
-      - gcc-5
-      - gcc-6
-      - gcc-7
-      - gcc-8
-      - gcc-9
-      - gcc-10
+      - gcc-4_8_5:
+          context:
+            - remote_tokens
+      - gcc-5:
+          context:
+            - remote_tokens
+      - gcc-6:
+          context:
+            - remote_tokens
+      - gcc-7:
+          context:
+            - remote_tokens
+      - gcc-8:
+          context:
+            - remote_tokens
+      - gcc-9:
+          context:
+            - remote_tokens
+      - gcc-10:
+          context:
+            - remote_tokens

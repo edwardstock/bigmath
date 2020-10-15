@@ -1,187 +1,113 @@
-working_directory: /root/bigmath
-project_name: bigmath
-project_version: 1.0.0
+checkout: git clone --recursive https://github.com/edwardstock/bigmath.git .
 
-checkout: git clone --recursive https://github.com/edwardstock/bigmath.git /root/bigmath
+env:
+  BINTRAY_USER: edwardstock
+  BINTRAY_API_KEY: $ENV
 
 commands:
   test:
     steps:
-      - run: rm -rf _build
-      - run: sh .circleci/test.sh
-
-  cmake:
-    steps:
-      - run: wget -O /tmp/cmake.sh https://github.com/Kitware/CMake/releases/download/v3.18.3/cmake-3.18.3-Linux-x86_64.sh
-      - run: sh /tmp/cmake.sh --skip-license --prefix=/usr
+      - run: bash .circleci/test.sh
 
   build_and_package:
     steps:
-      - run: sh cfg/make_package.sh
-
-  deploy:
-    steps:
-      - run: cp _build/*.rpm .
-      - run: cp _build/*.deb .
-      - run: cp _build/package_upload.sh .
-      - run: bash package_upload.sh
+      - run: bash cfg/package_make.sh -t package
+      - run: bash _build/package_upload.sh -t bintray
 
   make_project:
     steps:
       - test
       - build_and_package
-      - deploy
 
   init_deb:
     steps:
-      - run: apt -y update
-      - run: apt -y install wget curl git
-      - run: apt -y install gcc g++ make lsb-release autoconf python3 python3-pip libmpdec-dev libgmp-dev
-      - run: pip3 install --upgrade pip
-      - run: pip3 install setuptools
-      - run: pip3 install conan
+      - run: apt -y install libmpdec-dev libgmp-dev
       - run: conan install mpir/3.0.0@ --build=missing -s build_type=Debug
       - run: conan install mpdecimal/2.4.2@ --build=missing -s build_type=Debug
 
-  init_ubuntu:
+  init_centos:
     steps:
-      - run: init_deb
-
-  init_centos7:
-    steps:
-      - run: yum -y update && yum -y install epel-release centos-release-scl && yum -y update
-      - run: yum -y install curl wget git make autoconf rpm-build python36 devtoolset-9
-      - run: scl enable devtoolset-9 bash
       - run: yum -y install gmp-devel mpdecimal-devel
-      - run: pip3 install --upgrade pip
-      - run: pip3 install setuptools
-      - run: pip3 install conan
-      - run: conan profile new /root/.conan/profiles/default --detect --force
-      - run: conan install mpir/3.0.0@ --build=missing -s build_type=Debug
-      - run: conan install mpdecimal/2.4.2@ --build=missing -s build_type=Debug
-
-  init_centos8:
-    steps:
-      - run: yum -y update && yum -y install epel-release
-      - run: yum -y install https://rpms.remirepo.net/enterprise/remi-release-8.rpm && yum -y update
-      - run: yum -y install curl wget git make autoconf rpm-build python36 gcc gcc-c++
-      - run: yum -y install gmp-devel mpdecimal-devel
-      - run: pip3 install --upgrade pip
-      - run: pip3 install setuptools
-      - run: pip3 install conan
       - run: conan install mpir/3.0.0@ --build=missing -s build_type=Debug
       - run: conan install mpdecimal/2.4.2@ --build=missing -s build_type=Debug
 
   init_fedora:
     steps:
       - run: dnf -y update
-      - run: dnf -y install curl wget git gcc gcc-c++ make autoconf rpm-build cmake which
-      - run: dnf -y install mpir-devel mpdecimal-devel python36
-      - run: pip3 install --upgrade pip
-      - run: pip3 install setuptools
-      - run: pip3 install conan
+      - run: dnf -y install mpir-devel mpdecimal-devel
       - run: conan install mpir/3.0.0@ --build=missing
       - run: conan install mpdecimal/2.4.2@ --build=missing
 
-build_images:
-  edwardstock/bigmath_el7:
-    tag: 1
-    image: centos:centos7
+jobs:
+  centos7:
+    image: docker.edwardstock.com/gcc_dev_el7:latest
     steps:
-      - init_centos7
-      - cmake
+      - init_centos
+      - make_project
 
-  edwardstock/bigmath_el8:
-    tag: 1
-    image: centos:centos8
+  centos8:
+    image: docker.edwardstock.com/gcc_dev_el8:latest
     steps:
-      - init_centos8
-      - cmake
+      - init_centos
+      - make_project
 
-  edwardstock/bigmath_fc32:
-    tag: 1
-    image: fedora:32
+  fedora_fc32:
+    image: docker.edwardstock.com/gcc_dev_fc32:latest
     steps:
       - init_fedora
-      - cmake
+      - make_project
 
-  edwardstock/bigmath_fc33:
-    tag: 1
-    image: fedora:33
+  fedora_fc33:
+    image: docker.edwardstock.com/gcc_dev_fc33:latest
     steps:
       - init_fedora
-      - cmake
+      - make_project
 
-  edwardstock/bigmath_fc34:
-    tag: 1
-    image: fedora:34
+  fedora_fc34:
+    image: docker.edwardstock.com/gcc_dev_fc34:latest
     steps:
       - init_fedora
-      - cmake
+      - make_project
 
-  edwardstock/bigmath_deb_stretch:
-    tag: 1
-    image: debian:stretch
+  debian_jessie:
+    image: docker.edwardstock.com/gcc_dev_debian_jessie:latest
     steps:
       - init_deb
-      - cmake
+      - make_project
 
-  edwardstock/bigmath_deb_buster:
-    tag: 1
-    image: debian:buster
+  debian_stretch:
+    image: docker.edwardstock.com/gcc_dev_debian_stretch:latest
     steps:
       - init_deb
-      - cmake
-  edwardstock/bigmath_ubuntu_xenial:
-    tag: 1
-    image: ubuntu:xenial
+      - make_project
+
+  debian_buster:
+    image: docker.edwardstock.com/gcc_dev_debian_buster:latest
     steps:
       - init_deb
-      - cmake
-  edwardstock/bigmath_ubuntu_bionic:
-    tag: 1
-    image: ubuntu:bionic
+      - make_project
+
+  ubuntu_xenial:
+    image: docker.edwardstock.com/gcc_dev_ubuntu_xenial:latest
     steps:
       - init_deb
-      - cmake
-  edwardstock/bigmath_ubuntu_focal:
-    tag: 1
-    image: ubuntu:focal
+      - make_project
+
+  ubuntu_bionic:
+    image: docker.edwardstock.com/gcc_dev_ubuntu_bionic:latest
     steps:
       - init_deb
-      - cmake
-  edwardstock/bigmath_ubuntu_groovy:
-    tag: 1
-    image: ubuntu:groovy
+      - make_project
+
+  ubuntu_focal:
+    image: docker.edwardstock.com/gcc_dev_ubuntu_focal:latest
     steps:
       - init_deb
-      - cmake
+      - make_project
 
-multijob:
-  images:
-    # special config for centos 7
-    - config:
-      image: edwardstock/bigmath_el7:1
-      env:
-        CC: /opt/rh/devtoolset-9/root/bin/gcc
-        CXX: /opt/rh/devtoolset-9/root/bin/g++
-
-    - edwardstock/bigmath_el8:1
-    - edwardstock/bigmath_fc32:1
-    - edwardstock/bigmath_fc33:1
-    - edwardstock/bigmath_fc34:1
-    - edwardstock/bigmath_deb_stretch:1
-    - edwardstock/bigmath_deb_buster:1
-    - edwardstock/bigmath_ubuntu_xenial:1
-    - edwardstock/bigmath_ubuntu_bionic:1
-    - edwardstock/bigmath_ubuntu_focal:1
-    - edwardstock/bigmath_ubuntu_groovy:1
-
-  env:
-    BINTRAY_USER: edwardstock
-    BINTRAY_API_KEY: $ENV
-
-  steps:
-    - make_project
-
+  ubuntu_groovy:
+    image: docker.edwardstock.com/gcc_dev_ubuntu_groovy:latest
+    steps:
+      - init_deb
+      - make_project
 
