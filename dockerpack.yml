@@ -7,7 +7,7 @@ env:
 commands:
   test:
     steps:
-      - run: bash .circleci/test.sh
+      - run: bash cfg/package_make.sh --test
 
   build_and_package:
     steps:
@@ -22,21 +22,15 @@ commands:
   init_deb:
     steps:
       - run: apt -y install libmpdec-dev libgmp-dev
-      - run: conan install mpir/3.0.0@ --build=missing -s build_type=Debug
-      - run: conan install mpdecimal/2.4.2@ --build=missing -s build_type=Debug
 
   init_centos:
     steps:
       - run: yum -y install gmp-devel mpdecimal-devel
-      - run: conan install mpir/3.0.0@ --build=missing -s build_type=Debug
-      - run: conan install mpdecimal/2.4.2@ --build=missing -s build_type=Debug
 
   init_fedora:
     steps:
       - run: dnf -y update
       - run: dnf -y install mpir-devel mpdecimal-devel
-      - run: conan install mpir/3.0.0@ --build=missing
-      - run: conan install mpdecimal/2.4.2@ --build=missing
 
 jobs:
   centos7:

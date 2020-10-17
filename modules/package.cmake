@@ -74,7 +74,7 @@ install(EXPORT ${PROJECT_NAME}-targets
         DESTINATION ${INSTALL_CMAKE_DIR}
         )
 
-set(PACKAGE_RELEASE 2)
+set(PACKAGE_RELEASE 3)
 set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
 set(CPACK_PACKAGE_VENDOR "Eduard Maximovich")
@@ -88,7 +88,7 @@ set(CPACK_RPM_PACKAGE_GROUP "Development/Libraries")
 set(CPACK_DEBIAN_PACKAGE_SECTION "math")
 set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
 
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "libmpdec-dev (>=2.4.2), libgmp-dev (>=6.0.0)")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libmpdec-dev (>=2.4.1), libgmp-dev (>=6.0.0)")
 if (OS_NAME STREQUAL fedora)
 	set(CPACK_RPM_PACKAGE_REQUIRES "mpdecimal-devel >= 2.4.2, mpir-devel >= 3.0.0")
 else ()

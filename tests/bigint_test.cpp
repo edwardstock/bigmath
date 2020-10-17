@@ -311,3 +311,9 @@ TEST(BigInt, FromBigDecimal) {
     bigint conv2(mul_res);
     ASSERT_EQ(bigint("100000000000000000000"), conv2);
 }
+
+TEST(BigInt, DefaultCtor) {
+    bigint val;
+
+    ASSERT_EQ(bigint("0"), val);
+}
