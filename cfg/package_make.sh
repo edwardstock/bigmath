@@ -90,6 +90,10 @@ else
   cpusCnt=$(lscpu | grep -E '^CPU\(' | awk '{print $2}') # cpus count
   tpcpu=$(lscpu | grep -E '^Thread' | awk '{print $4}')  # threads per core
   threadCount=$((cpusCnt * tpcpu))
+
+  if ((threadCount <= 0)); then
+    threadCount=2
+  fi
 fi
 
 # create build root if not exists and go inside
