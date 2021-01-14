@@ -46,7 +46,7 @@ conan remote add edwardstock https://api.bintray.com/conan/edwardstock/conan-pub
 ```
 
 ```bash
-conan install <path/to/your/project> bigmath/1.0.0@edwardstock/latest
+conan install <path/to/your/project> bigmath/1.0.1@edwardstock/latest
 ```
 
 or using `conanfile.txt`

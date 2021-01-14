@@ -83,7 +83,7 @@ class BigmathConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = ["bigmath"]
-        if self.options["build_type"] == "Debug":
+        if self.settings.build_type == "Debug":
             self.cpp_info.cxxflags.append("-g -O0")
 
     def test(self):

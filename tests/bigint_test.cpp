@@ -312,6 +312,23 @@ TEST(BigInt, FromBigDecimal) {
     ASSERT_EQ(bigint("100000000000000000000"), conv2);
 }
 
+TEST(BigInt, PackDecimal) {
+    uint32_t decimal_size = 8;
+
+    // packing
+    uint32_t val = 0;
+    val |= (16777215 << decimal_size);
+    val |= ((uint8_t) 255);
+
+    // unpacking
+    uint32_t base_val = (val >> decimal_size) & 0xFFFFFF;
+    uint16_t dec_val = (val) &0xFF;
+
+    ASSERT_EQ(0xFFFFFFFFu, val);
+    ASSERT_EQ(0x00FFFFFFu, base_val);
+    ASSERT_EQ(0x000000FFu, dec_val);
+}
+
 TEST(BigInt, DefaultCtor) {
     bigint val;
 
