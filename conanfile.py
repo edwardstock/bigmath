@@ -44,7 +44,7 @@ class BigmathConan(ConanFile):
     )
     requires = (
         "mpir/3.0.0",
-        "mpdecimal/2.4.2"
+        "mpdecimal/2.5.0"
     )
     build_requires = (
         "gtest/1.8.1@bincrafters/stable"
@@ -84,7 +84,7 @@ class BigmathConan(ConanFile):
     def package_info(self):
         self.cpp_info.libs = ["bigmath"]
         if self.settings.build_type == "Debug":
-            self.cpp_info.cxxflags.append("-g -O0")
+            self.cpp_info.cxxflags.append("-g")
 
     def test(self):
         cmake = CMake(self)
