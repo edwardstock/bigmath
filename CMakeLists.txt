@@ -132,6 +132,7 @@ if (ENABLE_TEST)
 	if (NOT MSVC)
 		target_compile_options(${PROJECT_NAME}-test PRIVATE -Wno-missing-field-initializers)
 	endif ()
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-maybe-uninitialized")
 
 	if (NOT ENABLE_CONAN)
 		add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/gtest)
