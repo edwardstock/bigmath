@@ -68,6 +68,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 if (ENABLE_CONAN)
 	include(ConanInit)
+	add_conan_remote(edwardstock https://edwardstock.jfrog.io/artifactory/api/conan/conan)
 	conan_init()
 
 	set(HAVE_MPIR 1)

@@ -68,22 +68,17 @@ Supported distributions:
 
 Steps:
 
-* Create `bintray-edwardstock.repo` file inside `/etc/yum.repos.d`
+* Create `edwardstock.repo` file inside `/etc/yum.repos.d`
 * Add below to this file
 
 ```ini
-[bintray-edwardstock]
-name=bintray-edwardstock
-baseurl=https://dl.bintray.com/edwardstock/rh/[centos OR fedora]/$releasever/$basearch
-gpgcheck=0
-repo_gpgcheck=1
-enabled=1
-```
-
-* Add repository gpg to trusted
-
-```bash
-curl -s https://bintray.com/user/downloadSubjectPublicKey?username=bintray | gpg --import
+[edwardstock]
+name = edwardstock
+baseurl = https://edwardstock.jfrog.io/artifactory/rhel/[centos or fedora]/\$releasever/\$basearch
+enabled = 1
+gpgcheck = 0
+gpgkey = https://edwardstock.jfrog.io/artifactory/rhel/[centos or fedora]/\$releasever/\$basearch/repodata/repomd.xml.key
+repo_gpgcheck = 1
 ```
 
 * Update repository `yum -y update` or `dnf update`
@@ -97,8 +92,8 @@ Supported distributions:
 - ubuntu: xenial, bionic, focal, groovy
 
 ```bash
-echo "deb https://dl.bintray.com/edwardstock/debian {distribution} main" | sudo tee -a /etc/apt/sources.list
-curl -s https://bintray.com/user/downloadSubjectPublicKey?username=bintray | sudo apt-key add -
+echo "deb https://edwardstock.jfrog.io/artifactory/debian $(lsb_release -c -s) main" | sudo tee -a /etc/apt/sources.list
+curl -s https://edwardstock.jfrog.io/artifactory/api/gpg/key/public | sudo apt-key add -
 apt update && apt install libbigmath-dev
 ```
 

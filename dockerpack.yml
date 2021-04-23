@@ -12,7 +12,7 @@ commands:
   build_and_package:
     steps:
       - run: bash cfg/package_make.sh -t package
-      - run: bash _build/package_upload.sh -t bintray
+      - run: bash _build/package_upload.sh -t artifactory
 
   make_project:
     steps:
@@ -25,6 +25,7 @@ commands:
 
   init_centos:
     steps:
+      - run: yum -y update
       - run: yum -y install gmp-devel mpdecimal-devel
 
   init_fedora:
