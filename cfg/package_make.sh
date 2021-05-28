@@ -7,6 +7,8 @@ TYPE=""
 DRY_RUN=""
 CMAKE_OPTS=""
 BUILD_ROOT="${PWD}/_build"
+TEST_ONLY=""
+TEST_OPTION="ENABLE_TEST"
 
 function usage() {
   echo ""
@@ -15,6 +17,7 @@ function usage() {
   echo -e "    -h, --help       |  This help"
   echo -e "    -t, --type       |  Choose what package to build: archive or native OS package"
   echo -e "    --dry-run        |  Only echo commands without real building"
+  echo -e "    --test           |  Build and run only test configuration"
   echo -e "    -o, --options    |  Add string with additional cmake configure options. Example: -o \"-DVAR=1 -DVAR2=2\""
   echo -e "    -b, --buildroot  |  Path where to build project. Default: ${BUILD_ROOT}"
   echo ""
@@ -30,6 +33,16 @@ while (("$#")); do
   --dry-run)
     DRY_RUN=1
     shift
+    ;;
+  --test)
+    if [ -n "$2" ]; then
+      TEST_ONLY=1
+      TEST_OPTION="$2"
+      shift 2
+    else
+      TEST_ONLY=1
+      shift
+    fi
     ;;
   -t | --type)
     if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
@@ -83,7 +96,7 @@ else
   fi
 fi
 
-if [ "${TYPE}" == "" ]; then
+if [ "${TYPE}" == "" ] && [ "${TEST_ONLY}" != "1" ]; then
   echo "Please select type to build: archive or package"
   exit 1
 fi
@@ -93,6 +106,17 @@ if [ "${TYPE}" == "archive" ]; then
 fi
 
 mkdir -p ${BUILD_ROOT} && cd ${BUILD_ROOT}
+
+# if need to test project only
+if [ "${TEST_ONLY}" == "1" ]; then
+  # delete everything inside just if build root already used
+  rm -rf ./*
+  cmake .. -DCMAKE_BUILD_TYPE=Debug -DENABLE_CONAN=Off -D${TEST_OPTION}=On
+  make -j ${threadCount}
+  make test
+  exit 0
+fi
+
 rm -rf ./*
 cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_CONAN=Off -DENABLE_TEST=Off ${INTERNAL_OPTS} ${CMAKE_OPTS}
 
