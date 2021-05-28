@@ -1,3 +1,7 @@
+## 1.0.3
+- Updated mpdecimal conan dependency to 2.5.1
+- Fixed `_MSC_VER` redefinition
+
 ## 1.0.2 (Fri Jan 22 2021)
 - Updated mpdecimal conan dependency to 2.5.0 (as 2.4.2 no more compiles on macOS Big Sur)
 

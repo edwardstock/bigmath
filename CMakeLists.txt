@@ -1,24 +1,22 @@
 cmake_minimum_required(VERSION 3.12)
 project(bigmath
-        VERSION 1.0.2
+        VERSION 1.0.3
         DESCRIPTION "C++ arbitrary precision float and integer numbers library"
         LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 
 cmake_policy(SET CMP0074 NEW)
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cfg/version.in ${CMAKE_CURRENT_SOURCE_DIR}/version @ONLY NEWLINE_STYLE UNIX)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/modules)
-if (WIN32)
-	execute_process(COMMAND cmd /C "echo ${CMAKE_PROJECT_VERSION} > ${CMAKE_CURRENT_SOURCE_DIR}/version")
-else ()
-	execute_process(COMMAND bash -c "echo ${CMAKE_PROJECT_VERSION} > ${CMAKE_CURRENT_SOURCE_DIR}/version")
-endif ()
 
 
 include(modules/compilers_flags.cmake)
 
 option(ENABLE_CONAN "Enable dependency manager" On)
-option(ENABLE_SHARED "Build shared library" Off)
+if (NOT WIN32)
+	option(ENABLE_SHARED "Build shared library" Off)
+endif ()
 option(ENABLE_TEST "Build test target" Off)
 
 set(BIGMATHPP_EXPORTING 1)
@@ -45,6 +43,9 @@ set(SOURCES
     src/bd_context.cpp)
 
 if (ENABLE_SHARED)
+	if (WIN32)
+		message(FATAL_ERROR "DLL does not supports thread_local dllimport so can't build it")
+	endif ()
 	message(STATUS "Build shared library")
 	add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
@@ -132,8 +133,9 @@ if (ENABLE_TEST)
 
 	if (NOT MSVC)
 		target_compile_options(${PROJECT_NAME}-test PRIVATE -Wno-missing-field-initializers)
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-maybe-uninitialized")
 	endif ()
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-maybe-uninitialized")
+
 
 	if (NOT ENABLE_CONAN)
 		add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/gtest)

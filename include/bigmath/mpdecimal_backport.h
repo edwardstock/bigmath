@@ -13,10 +13,10 @@
 
 // old mpdecimal thinks we're still using MSVC 6
 #ifdef _MSC_VER
-#define _TMP_MSC_VER _MSC_VER
+#pragma push_macro("_MSC_VER")
 #undef _MSC_VER
 #include <mpdecimal.h>
-#define _MSC_VER _TMP_MSC_VER
+#pragma pop_macro("_MSC_VER")
 #else
 #include <mpdecimal.h>
 #endif

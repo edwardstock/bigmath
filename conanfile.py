@@ -44,7 +44,7 @@ class BigmathConan(ConanFile):
     )
     requires = (
         "mpir/3.0.0",
-        "mpdecimal/2.5.0"
+        "mpdecimal/2.5.1"
     )
     build_requires = (
         "gtest/1.10.0"
@@ -58,6 +58,7 @@ class BigmathConan(ConanFile):
     def configure(self):
         if self.settings.compiler == "Visual Studio":
             del self.settings.compiler.runtime
+            del self.options.shared
 
     def build(self):
         cmake = CMake(self)
@@ -66,7 +67,7 @@ class BigmathConan(ConanFile):
             'ENABLE_SHARED': "Off",
         }
 
-        if self.options.shared:
+        if self.settings.compiler != "Visual Studio" and self.options.shared:
             opts['ENABLE_SHARED'] = "On"
 
         cmake.configure(defs=opts)
@@ -83,7 +84,7 @@ class BigmathConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = ["bigmath"]
-        if self.settings.build_type == "Debug":
+        if self.settings.build_type == "Debug" and self.settings.compiler != "Visual Studio":
             self.cpp_info.cxxflags.append("-g")
 
     def test(self):

@@ -1,8 +1,8 @@
 # BigMath
 
-| Bintray | Windows | Linux & macOS |
-|:--------:|:---------:|:-----------------:|
-[ ![Download](https://api.bintray.com/packages/edwardstock/conan-public/bigmath:edwardstock/images/download.svg?_latestVersion)](https://bintray.com/edwardstock/conan-public/bigmath:edwardstock/_latestVersion)|unavailable|[![CircleCI](https://circleci.com/gh/edwardstock/bigmath/tree/master.svg?style=svg)](https://circleci.com/gh/edwardstock/bigmath/tree/master)|
+| Windows | Linux & macOS |
+|:---------:|:-----------------:|
+| conan |[![CircleCI](https://circleci.com/gh/edwardstock/bigmath/tree/master.svg?style=svg)](https://circleci.com/gh/edwardstock/bigmath/tree/master)|
 
 
 
@@ -42,18 +42,18 @@ void do_something() {
 
 Add remote:
 ```bash
-conan remote add edwardstock https://api.bintray.com/conan/edwardstock/conan-public
+conan remote add edwardstock https://edwardstock.jfrog.io/artifactory/api/conan/conan
 ```
 
 ```bash
-conan install <path/to/your/project> bigmath/1.0.2@edwardstock/latest
+conan install <path/to/your/project> bigmath/1.0.3@edwardstock/latest
 ```
 
 or using `conanfile.txt`
 
 ```ini
 [requires]
-bigmath/1.0.2@edwardstock/latest
+bigmath/1.0.3@edwardstock/latest
 
 [generators]
 cmake
