@@ -46,14 +46,14 @@ conan remote add edwardstock https://edwardstock.jfrog.io/artifactory/api/conan/
 ```
 
 ```bash
-conan install <path/to/your/project> bigmath/1.0.3@edwardstock/latest
+conan install <path/to/your/project> bigmath/1.0.4@edwardstock/latest
 ```
 
 or using `conanfile.txt`
 
 ```ini
 [requires]
-bigmath/1.0.3@edwardstock/latest
+bigmath/1.0.4@edwardstock/latest
 
 [generators]
 cmake

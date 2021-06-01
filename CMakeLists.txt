@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(bigmath
-        VERSION 1.0.3
+        VERSION 1.0.4
         DESCRIPTION "C++ arbitrary precision float and integer numbers library"
         LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
@@ -32,7 +32,9 @@ set(HEADERS
     include/bigmath/typearith.h
     include/bigmath/bigmath_config.h
     include/bigmath/errors.h
-    include/bigmath/utils.h include/bigmath/bd_context.h)
+    include/bigmath/utils.h
+    include/bigmath/bd_context.h
+    )
 
 set(SOURCES
     ${HEADERS}
@@ -40,7 +42,8 @@ set(SOURCES
     src/mpalloc.cpp
     src/mpdecimal_backport.cpp
     src/bigdecimal.cpp
-    src/bd_context.cpp)
+    src/bd_context.cpp
+    )
 
 if (ENABLE_SHARED)
 	if (WIN32)

@@ -1,3 +1,8 @@
+# Changelog
+
+## 1.0.4
+- Automatically increase precision (if neccessary) while using operators `*=`, `+=` and `/=`
+
 ## 1.0.3
 - Updated mpdecimal conan dependency to 2.5.1
 - Fixed `_MSC_VER` redefinition

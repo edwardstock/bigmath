@@ -205,14 +205,26 @@ private:
     }
 
     ALWAYS_INLINE bigdecimal binary_func(
+        // func
         void (*func)(mpd_t*, const mpd_t*, const mpd_t*, const mpd_context_t*, uint32_t*),
+        // other
         const bigdecimal& other,
+        // context
         bd_context&& c) const {
         bigdecimal result;
         uint32_t status = 0;
         func(result.get(), getconst(), other.getconst(), c.getconst(), &status);
         c.raise(status);
         return result;
+    }
+    ALWAYS_INLINE bigdecimal& inplace_binary_func_move_ctx(
+        void (*func)(mpd_t*, const mpd_t*, const mpd_t*, const mpd_context_t*, uint32_t*),
+        const bigdecimal& other,
+        bd_context&& c) {
+        uint32_t status = 0;
+        func(get(), getconst(), other.getconst(), c.getconst(), &status);
+        c.raise(status);
+        return *this;
     }
 
     ALWAYS_INLINE bigdecimal& inplace_binary_func(
@@ -435,16 +447,16 @@ public:
     };
 
     ALWAYS_INLINE bigdecimal& operator+=(const bigdecimal& other) {
-        return inplace_binary_func(mpd_qadd, other);
+        return inplace_binary_func_move_ctx(mpd_qadd, other, calc_precision(*this, other));
     }
     ALWAYS_INLINE bigdecimal& operator-=(const bigdecimal& other) {
         return inplace_binary_func(mpd_qsub, other);
     }
     ALWAYS_INLINE bigdecimal& operator*=(const bigdecimal& other) {
-        return inplace_binary_func(mpd_qmul, other);
+        return inplace_binary_func_move_ctx(mpd_qmul, other, calc_precision(*this, other));
     }
     ALWAYS_INLINE bigdecimal& operator/=(const bigdecimal& other) {
-        return inplace_binary_func(mpd_qdiv, other);
+        return inplace_binary_func_move_ctx(mpd_qdiv, other, calc_precision(*this, other));
     }
     ALWAYS_INLINE bigdecimal& operator%=(const bigdecimal& other) {
         return inplace_binary_func(mpd_qrem, other);
