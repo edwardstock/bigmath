@@ -79,4 +79,14 @@ TEST(BigDecimal, ToBigint) {
     bigdec18 res = val * base;
     std::cout << res.to_bigint() << std::endl;
     std::cout << val.format(".6f") << std::endl;
+    std::cout << val.to_sci() << std::endl;
+    std::cout << val.to_eng(false) << std::endl;
+}
+
+TEST(BigDecimal, Move) {
+    bigdec18 a("100");
+    bigdec18 b = std::move(a);
+    // NaN
+    ASSERT_TRUE(a.isnan());
+    ASSERT_EQ(bigdec18("100"), b);
 }

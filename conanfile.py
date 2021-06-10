@@ -47,7 +47,7 @@ class BigmathConan(ConanFile):
         "mpdecimal/2.5.1"
     )
     build_requires = (
-        "gtest/1.10.0"
+        "gtest/1.10.0",
     )
 
     def source(self):

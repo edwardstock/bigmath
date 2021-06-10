@@ -10,10 +10,13 @@
 #define BIGMATHPP_UTILS_H
 
 #include "errors.h"
+#include "mpdecimal_backport.h"
 
 #include <cmath>
 #include <cstdint>
 #include <limits>
+#include <memory>
+#include <string>
 #include <type_traits>
 
 /******************************************************************************/
@@ -42,6 +45,19 @@ inline dest_t safe_downcast(src_t v) {
     }
 
     return static_cast<dest_t>(v);
+}
+
+inline std::shared_ptr<const char> shared_cp(const char* cp) {
+    if (cp == nullptr) {
+        throw runtime_error("invalid nullptr argument");
+    }
+
+    return std::shared_ptr<const char>(cp, [](const char* s) { mpd_free(const_cast<char*>(s)); });
+}
+
+inline std::string string_from_cp(const char* cp) {
+    const auto p = shared_cp(cp);
+    return std::string(p.get());
 }
 
 template<typename T>
@@ -116,4 +132,4 @@ struct uint64_compat {
 
 } // namespace bigmath
 
-#endif //BIGMATHPP_UTILS_H
+#endif // BIGMATHPP_UTILS_H

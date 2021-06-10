@@ -146,7 +146,7 @@ private:
         } else {
             assert(mpd_isdynamic_data(src));
             if (mpd_isdynamic_data(&value)) {
-                free(value.data);
+                mpd_free(value.data);
             }
             value = *src;
             assert(mpd_isstatic(&value));
@@ -936,8 +936,7 @@ public:
         if (cp == NULL) {
             throw malloc_error("out of memory");
         }
-
-        return std::string(cp);
+        return string_from_cp(cp);
     }
 
     inline std::string to_eng(bool capitals = true) const {
@@ -945,8 +944,7 @@ public:
         if (cp == NULL) {
             throw malloc_error("out of memory");
         }
-
-        return std::string(cp);
+        return string_from_cp(cp);
     }
 
     /// \brief Format output by Python formatting standard
@@ -976,8 +974,7 @@ public:
                 throw runtime_error("internal error: unexpected status");
             }
         }
-
-        return std::string(cp);
+        return string_from_cp(cp);
     }
 
     inline std::string format(const std::string& s, const bd_context& c = context) const {
