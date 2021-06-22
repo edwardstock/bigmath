@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(bigmath
-        VERSION 1.0.5
+        VERSION 1.0.6
         DESCRIPTION "C++ arbitrary precision float and integer numbers library"
         LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)

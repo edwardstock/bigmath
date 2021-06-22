@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.6
+
+- Suppressed unknown bug assert while moving value from one bigdecimal to another
+- Updated deploy script
+
 ## 1.0.5
 
 - Updated decimal using mpdec++ source

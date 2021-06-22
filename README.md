@@ -53,7 +53,7 @@ or using `conanfile.txt`
 
 ```ini
 [requires]
-bigmath/1.0.4@edwardstock/latest
+bigmath/1.0.6@edwardstock/latest
 
 [generators]
 cmake

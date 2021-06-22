@@ -129,6 +129,9 @@ private:
 
     ALWAYS_INLINE
     void move_value(const mpd_t* const src, const bool fastcopy) {
+        if (!mpd_isstatic(src)) {
+            return;
+        }
         assert(mpd_isstatic(&value));
         assert(mpd_isstatic(src));
         assert(value.alloc >= MINALLOC);
