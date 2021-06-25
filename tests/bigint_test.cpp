@@ -65,6 +65,14 @@ TEST(BigInt, Add) {
     ASSERT_EQ(5, nv);
 }
 
+TEST(BigInt, Division) {
+    bigint a("7938465220036060304");
+    bigint b("1000000000000000000");
+
+    bigint c = a / b;
+    ASSERT_EQ(bigint("7"), c);
+}
+
 TEST(BigInt, Sub) {
     bigint ten("10");
     bigint res = ten - bigint("1");

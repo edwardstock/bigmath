@@ -14,6 +14,7 @@
 
 #include <cmath>
 #include <cstdint>
+#include <cstring>
 #include <limits>
 #include <memory>
 #include <string>
@@ -58,6 +59,15 @@ inline std::shared_ptr<const char> shared_cp(const char* cp) {
 inline std::string string_from_cp(const char* cp) {
     const auto p = shared_cp(cp);
     return std::string(p.get());
+}
+
+inline bool has_dec_point(const char* s) {
+    for (size_t i = 0; i < strlen(s); i++) {
+        if (*(s + i) == '.') {
+            return true;
+        }
+    }
+    return false;
 }
 
 template<typename T>

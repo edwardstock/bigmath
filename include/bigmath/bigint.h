@@ -287,6 +287,7 @@ public:
 
     bigint operator/(const bigint& other) const {
         bigint out(m_val);
+
         out.m_val /= other.m_val;
         return out;
     }

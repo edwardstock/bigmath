@@ -90,3 +90,13 @@ TEST(BigDecimal, Move) {
     ASSERT_TRUE(a.isnan());
     ASSERT_EQ(bigdec18("100"), b);
 }
+
+TEST(BigDecimal, MulAndAdd) {
+    bigint sfee("1000000000000000000");
+    bigdec18 fee = bigdec18(sfee) / bigdec18("1000000000000000000");
+    bigdec18 mul(bigint("1"));
+    bigdec18 extra_fee(bigdec18(bigint("200000000000000000")) / bigdec18("1000000000000000000"));
+
+    bigdec18 res = fee * mul + extra_fee;
+    ASSERT_EQ(bigdec18("1.20"), res);
+}

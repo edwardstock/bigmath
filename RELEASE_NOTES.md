@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.7
+
+- `mpd_qset_string` works wrong if string is integer number without decimal point. Fixed.
+
 ## 1.0.6
 
 - Suppressed unknown bug assert while moving value from one bigdecimal to another

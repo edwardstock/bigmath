@@ -415,7 +415,14 @@ public:
 
         uint32_t status = 0;
         mpd_maxcontext(&maxcontext);
-        mpd_qset_string(&value, s, &maxcontext, &status);
+
+        if (has_dec_point(s)) {
+            mpd_qset_string(&value, s, &maxcontext, &status);
+        } else {
+            auto ss = std::string(s);
+            ss += ".0";
+            mpd_qset_string(&value, ss.c_str(), &maxcontext, &status);
+        }
 
         if (status & (MPD_Inexact | MPD_Rounded | MPD_Clamped)) {
             /* we want exact results */
