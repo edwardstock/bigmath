@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.8
+
+- Using GMP instead of MPIR for Apple arm64 processor (M1)
+
 ## 1.0.7
 
 - `mpd_qset_string` works wrong if string is integer number without decimal point. Fixed.

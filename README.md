@@ -1,9 +1,6 @@
 # BigMath
 
-| Windows | Linux & macOS |
-|:---------:|:-----------------:|
-| conan |[![CircleCI](https://circleci.com/gh/edwardstock/bigmath/tree/master.svg?style=svg)](https://circleci.com/gh/edwardstock/bigmath/tree/master)|
-
+ [![CircleCI](https://circleci.com/gh/edwardstock/bigmath/tree/master.svg?style=svg)](https://circleci.com/gh/edwardstock/bigmath/tree/master)
 
 
 ## Reqs
@@ -53,7 +50,7 @@ or using `conanfile.txt`
 
 ```ini
 [requires]
-bigmath/1.0.6@edwardstock/latest
+bigmath/1.0.8@edwardstock/latest
 
 [generators]
 cmake

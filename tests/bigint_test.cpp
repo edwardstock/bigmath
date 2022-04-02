@@ -11,6 +11,7 @@
 
 #include <bigmath/bigint.h>
 #include <gtest/gtest.h>
+#include <vector>
 
 using namespace bigmath;
 
@@ -341,4 +342,22 @@ TEST(BigInt, DefaultCtor) {
     bigint val;
 
     ASSERT_EQ(bigint("0"), val);
+}
+
+bigint fibonacci(size_t n) {
+    std::vector<bigint> result(2 + n);
+    result[0] = bigint("1");
+    result[1] = bigint("1");
+
+    for (uint64_t i = 2; i <= n; i++) {
+        result[i] = (result[i - 1] + result[i - 2]);
+    }
+    return result[n];
+}
+
+TEST(BigInt, BigModulo) {
+    bigint val = fibonacci(98);
+    std::cout << val << std::endl;
+    val %= bigint("10000");
+    std::cout << val << std::endl;
 }

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(bigmath
-        VERSION 1.0.7
+        VERSION 1.0.8
         DESCRIPTION "C++ arbitrary precision float and integer numbers library"
         LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
@@ -76,9 +76,16 @@ if (ENABLE_CONAN)
 	add_conan_remote(edwardstock https://edwardstock.jfrog.io/artifactory/api/conan/conan)
 	conan_init()
 
-	set(HAVE_MPIR 1)
-	#	target_link_libraries(${PROJECT_NAME} CONAN_PKG::gmp)
-	target_link_libraries(${PROJECT_NAME} CONAN_PKG::mpir)
+
+	if (APPLE AND CMAKE_HOST_SYSTEM_PROCESSOR STREQUAL "arm64")
+		set(HAVE_MPIR 0)
+		set(HAVE_GMP 1)
+		target_link_libraries(${PROJECT_NAME} CONAN_PKG::gmp)
+	else ()
+		set(HAVE_MPIR 1)
+		target_link_libraries(${PROJECT_NAME} CONAN_PKG::mpir)
+	endif ()
+
 	target_link_libraries(${PROJECT_NAME} CONAN_PKG::mpdecimal)
 else ()
 	find_package(GMP 6.0.0)

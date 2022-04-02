@@ -100,3 +100,37 @@ TEST(BigDecimal, MulAndAdd) {
     bigdec18 res = fee * mul + extra_fee;
     ASSERT_EQ(bigdec18("1.20"), res);
 }
+
+struct test_s {
+    bigdec18 v1, v2;
+};
+
+test_s get_test_s() {
+    test_s a;
+    a.v1 = bigdec18("1.750000000000000000");
+    a.v2 = bigdec18("10.489009629244204631");
+
+    return a;
+}
+
+void test_copy() {
+    size_t cnt = 1000;
+    std::vector<test_s> test_items;
+    for (size_t i = 0; i < cnt; i++) {
+        test_s item;
+
+        item = get_test_s();
+        test_items.push_back(std::move(item));
+    }
+
+    std::vector<test_s> other1, other2;
+
+    other1.insert(other1.end(), test_items.begin(), test_items.end());
+    other2.insert(other2.end(), other1.begin(), other1.end());
+}
+
+TEST(BigDecimal, CopyCtorMultiple) {
+    for (size_t i = 0; i < 20; i++) {
+        test_copy();
+    }
+}

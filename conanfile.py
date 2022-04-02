@@ -43,7 +43,6 @@ class BigmathConan(ConanFile):
         "README.md"
     )
     requires = (
-        "mpir/3.0.0",
         "mpdecimal/2.5.1"
     )
     build_requires = (
@@ -56,6 +55,11 @@ class BigmathConan(ConanFile):
             git.clone("https://github.com/edwardstock/bigmath.git", "master")
 
     def configure(self):
+        if self.settings.os == "Macos" and self.settings.arch == "armv8":
+            self.requires.add("gmp/6.2.1")
+        else:
+            self.requires.add("mpir/3.0.0")
+
         if self.settings.compiler == "Visual Studio":
             del self.settings.compiler.runtime
             del self.options.shared
